@@ -19,7 +19,9 @@ export const BarItem = styled.div`
   padding: 15px;
 `;
 
-export const BarItemFirst = styled(BarItem)``;
+export const BarItemFirst = styled(BarItem)`
+  justify-self: start;
+`;
 
 export const BarItemCenter = styled(BarItem)`
   justify-self: center;

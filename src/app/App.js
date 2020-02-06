@@ -4,6 +4,7 @@ import { Drag } from "./Drag";
 import {
   HeaderBar,
   BarItem,
+  BarItemFirst,
   BarItemCenter,
   BarItemThird
 } from "../base/HeaderBar";
@@ -70,9 +71,9 @@ export class App extends React.Component {
     return (
       <div>
         <HeaderBar>
-          <BarItem>
+          <BarItemFirst>
             <IconBars />
-          </BarItem>
+          </BarItemFirst>
 
           <BarItemCenter>
             <IconCodepen />
