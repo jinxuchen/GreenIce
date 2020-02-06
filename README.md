@@ -1,7 +1,7 @@
-##Download npm
+## Install npm
 
-##Install react.js
+## Install react.js
 
-##Install Styled-components
+## Install Styled-components
 
-##Font-awesome
+## Font-awesome
