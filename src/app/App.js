@@ -10,6 +10,7 @@ import {
 } from "../base/HeaderBar";
 import { FooterBar } from "../base/FooterBar";
 import { IconBars, IconCodepen, IconAppStore } from "../base/Icon";
+import { WalktheDog } from "./WalktheDog";
 
 const Header = styled.div`
   top: 0;
@@ -23,7 +24,14 @@ const Header = styled.div`
   height: 380px;
 `; //35vw
 
-const ImageDialog = styled.div`
+const PlayGround = styled.div`
+  width: 100%;
+  height: 600px;
+  border: 7px solid #395d73;
+  background-color: #acd9bb;
+`;
+
+export const ImageDialog = styled.div`
   border-top: 3px solid #395d73;
   display: flex;
   flex-direction: row;
@@ -74,38 +82,37 @@ export class App extends React.Component {
           <BarItemFirst>
             <IconBars />
           </BarItemFirst>
-
           <BarItemCenter>
             <IconCodepen />
           </BarItemCenter>
-
           <BarItemThird>
             <IconAppStore />
           </BarItemThird>
         </HeaderBar>
 
         <Header>what up!</Header>
+
         <ImageDialog>
           <Image src="https://www.petmd.com/sites/default/files/adult-homeless-cat-asking-for-food-picture-id847415388.jpg" />
-
           <Dialog>
             <DialogItem color="#EEC9C8">
               <span>name</span>
             </DialogItem>
-
             <DialogItem color="#F6DDDF">
               <span>name</span>
             </DialogItem>
-
             <DialogItem color="#6F04D9">
               <span>name</span>
             </DialogItem>
-
             <DialogItem color="#05F29B">
               <span>name</span>
             </DialogItem>
           </Dialog>
         </ImageDialog>
+
+        <PlayGround>
+          <WalktheDog />
+        </PlayGround>
 
         <Footer>See ya latar!</Footer>
       </div>
