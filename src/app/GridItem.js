@@ -47,15 +47,14 @@ export class GridItem extends React.Component {
 
   handleMouseMove = e => {
     e.preventDefault();
-    if (this.state.move) {
-      const mouseX = e.clientX;
-      const mouseY = e.clientY;
 
+    if (this.state.move) {
+      /*ref to get offset as initial position*/
       const initialX = this.gridItem.current.offsetLeft;
       const initialY = this.gridItem.current.offsetTop;
 
+      /*rect to get current coords*/
       const rect = this.gridItem.current.getBoundingClientRect();
-
       const coords = {
         a: { x: rect.left, y: rect.top },
         b: { x: rect.left + rect.width, y: rect.top },
@@ -64,8 +63,8 @@ export class GridItem extends React.Component {
       };
 
       /*moving algrithmn*/
-      const moveX = mouseX - initialX - 75;
-      const moveY = mouseY - initialY - 75;
+      const moveX = this.props.mouseX - initialX - 75;
+      const moveY = this.props.mouseY - initialY - 75;
 
       this.setState({ moveX, moveY, coords });
     }
@@ -86,21 +85,23 @@ export class GridItem extends React.Component {
   render() {
     return (
       <StyledItem
+        type={this.props.type}
         ref={this.gridItem}
         onMouseDown={this.handleMouseDown}
         onMouseUp={this.handleMouseUp}
         onMouseMove={this.handleMouseMove}
+        move={this.state.move}
         moveX={this.state.moveX}
         moveY={this.state.moveY}
-        move={this.state.move}
-        type={this.props.type}
+        mouseX={this.props.mouseX}
+        mouseY={this.props.mouseY}
       >
         {this.props.name}
 
         <span>
-          {Math.round(this.props.currentX)}
+          {Math.round(this.state.coords.a.x)}
           {", "}
-          {Math.round(this.props.currentY)}
+          {Math.round(this.state.coords.a.y)}
         </span>
       </StyledItem>
     );

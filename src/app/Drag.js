@@ -25,75 +25,33 @@ const LoadArea = styled.div`
   border: 3px dashed black;
 `;
 
-const DragItem = styled.div.attrs(props => ({
-  style: {
-    transform: "translate(" + props.x + "px," + props.y + "px" + ")",
-    opacity: props.move ? "0.8" : "1",
-    zIndex: props.move ? "200" : "100",
-    backgroundColor: props.type === "drag" ? "lightblue" : "lightgreen"
-  }
-}))`
-  display: flex;
-  justify-content: center;
-  align-items: start;
-  color: white;
-  font-size: 35px;
-
-  height: 150px;
-  width: 150px;
-
-  cursor: pointer;
-  position: relative;
-
-  span {
-    color: black;
-    font-size: 30px;
-  }
-`;
-
 export class Drag extends React.Component {
   constructor(props) {
     super(props);
+
+    this.gridItemRef = React.createRef();
 
     this.state = {
       x: 0,
       y: 0,
       move: false,
-      currentX: 0,
-      currentY: 0
+      mouseX: 0,
+      mouseY: 0
     };
   }
 
+  componentDidUpdate = () => {
+    const itemCoords = this.gridItemRef.current.offsetLeft;
+    console.log(itemCoords);
+  };
+
   handleMouseMove = e => {
-    //item should move with mouse
+    e.preventDefault();
 
-    if (this.state.move) {
-      const x = e.clientX;
-      const y = e.clientY;
-      this.setState({ x, y });
-    }
-  };
+    const mouseX = e.clientX;
+    const mouseY = e.clientY;
 
-  handleClick = () => {
-    if (this.props.type === "click") {
-      if (this.state.move) {
-        this.setState({ move: false });
-      } else {
-        this.setState({ move: true });
-      }
-    }
-  };
-
-  handleMouseDown = () => {
-    if (this.props.type === "drag") {
-      this.setState({ move: true });
-    }
-  };
-
-  handleMouseUp = () => {
-    if (this.props.type === "drag") {
-      this.setState({ move: false });
-    }
+    this.setState({ mouseX, mouseY });
   };
 
   handleDragEnter = e => {
@@ -110,16 +68,11 @@ export class Drag extends React.Component {
     return (
       <DragBoard onMouseMove={this.handleMouseMove}>
         <GridItem
-          onMouseDown={this.handleMouseDown}
-          onMouseUp={this.handleMouseUp}
-          x={this.state.x}
-          y={this.state.y}
-          move={this.state.move}
           type={this.props.type}
           name={this.props.name}
-          currentX={this.state.currentX}
-          currentY={this.state.currentY}
-          onMouseMove={this.handleMouseMove}
+          mouseX={this.state.mouseX}
+          mouseY={this.state.mouseY}
+          ref={this.gridItemRef}
         />
 
         <LoadArea
