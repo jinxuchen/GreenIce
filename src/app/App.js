@@ -25,6 +25,9 @@ const Header = styled.div`
 `; //35vw
 
 const PlayGround = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   width: 100%;
   height: 600px;
   border: 7px solid #395d73;
@@ -92,6 +95,12 @@ export class App extends React.Component {
 
         <Header>what up!</Header>
 
+        <PlayGround>
+          <Drag name="drag me!" type="drag" />
+          <Drag name="click me!" type="click" />
+          <WalktheDog />
+        </PlayGround>
+
         <ImageDialog>
           <Image src="https://www.petmd.com/sites/default/files/adult-homeless-cat-asking-for-food-picture-id847415388.jpg" />
           <Dialog>
@@ -109,10 +118,6 @@ export class App extends React.Component {
             </DialogItem>
           </Dialog>
         </ImageDialog>
-
-        <PlayGround>
-          <WalktheDog />
-        </PlayGround>
 
         <Footer>See ya latar!</Footer>
       </div>

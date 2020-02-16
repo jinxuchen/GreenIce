@@ -54,7 +54,7 @@ const Field = styled.div`
   margin-left: 70px;
   background-color: lightblue;
   width: 50%;
-  height: 505px;
+  height: 50%;
   color: lightgreen;
   cursor: grab;
 `;
@@ -82,7 +82,6 @@ export class WalktheDog extends React.Component {
     this.setState({
       animationOn: this.state.animationOn ? false : true
     });
-    console.log(this.state.animationOn);
   };
 
   render() {
