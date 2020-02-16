@@ -1,52 +1,68 @@
 import React from "react";
 import styled from "styled-components";
+import { GridItem } from "./GridItem";
 
 const DragBoard = styled.div`
   background-color: white;
   height: 50%;
+  display: flex;
+  user-select: none;
+`;
+
+const LoadArea = styled.div`
+  display: ${props => (props.show === true ? "flex" : "none")};
+
+  justify-content: center;
+  align-items: center;
+  color: black;
+  opacity: 0.7;
+  font-size: 40px;
+  z-index: 1;
+
+  margin-left: 30px;
+  width: 300px;
+  height: 200px;
+  border: 3px dashed black;
 `;
 
 const DragItem = styled.div.attrs(props => ({
   style: {
     transform: "translate(" + props.x + "px," + props.y + "px" + ")",
-    opacity: props.move ? "0.5" : "1",
+    opacity: props.move ? "0.8" : "1",
+    zIndex: props.move ? "200" : "100",
     backgroundColor: props.type === "drag" ? "lightblue" : "lightgreen"
   }
 }))`
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: start;
   color: white;
-  font-size: 40px;
+  font-size: 35px;
 
   height: 150px;
   width: 150px;
 
   cursor: pointer;
   position: relative;
+
+  span {
+    color: black;
+    font-size: 30px;
+  }
 `;
 
 export class Drag extends React.Component {
   constructor(props) {
     super(props);
 
-    this.dragMe = React.createRef();
     this.state = {
-      moveX: 0,
-      moveY: 0,
-      move: false
+      x: 0,
+      y: 0,
+      move: false,
+      currentX: 0,
+      currentY: 0
     };
   }
-
-  getMouseCoords = e => {
-    e.preventDefault();
-
-    const x = e.clientX;
-    const y = e.clientY;
-
-    this.setState({ x, y });
-    console.log("(", this.state.x, ",", this.state.y, ")");
-  };
 
   handleMouseMove = e => {
     //item should move with mouse
@@ -54,25 +70,7 @@ export class Drag extends React.Component {
     if (this.state.move) {
       const x = e.clientX;
       const y = e.clientY;
-
-      const offsetLeft = this.dragMe.current.offsetLeft;
-      const offsetTop = this.dragMe.current.offsetTop;
-
-      /*
-     for setting value for left and bottom
-      const moveX = offsetLeft - x + this.state.moveX + 75;
-      const moveY = offsetTop - y + this.state.moveY + 75;
-      */
-
-      const moveX = x - offsetLeft - 75;
-      const moveY = y - offsetTop - 75;
-
-      /*
-      console.log("mouse: ", x, y);
-      console.log("object offset: ", offsetLeft, offsetTop);
-      console.log("move: ", moveX, moveY);
-      */
-      this.setState({ moveX, moveY });
+      this.setState({ x, y });
     }
   };
 
@@ -98,22 +96,40 @@ export class Drag extends React.Component {
     }
   };
 
+  handleDragEnter = e => {
+    e.target.style.color = "red";
+    console.log(e.target.style);
+  };
+
+  handleDragOver = e => {
+    e.target.style.color = "red";
+    console.log(e.target.style);
+  };
+
   render() {
     return (
       <DragBoard onMouseMove={this.handleMouseMove}>
-        <DragItem
-          ref={this.dragMe}
-          /*use ref to get this.dragMe.current.offsetTop */
-          onClick={this.handleClick}
+        <GridItem
           onMouseDown={this.handleMouseDown}
           onMouseUp={this.handleMouseUp}
-          x={this.state.moveX}
-          y={this.state.moveY}
+          x={this.state.x}
+          y={this.state.y}
           move={this.state.move}
           type={this.props.type}
+          name={this.props.name}
+          currentX={this.state.currentX}
+          currentY={this.state.currentY}
+          onMouseMove={this.handleMouseMove}
+        />
+
+        <LoadArea
+          show={this.props.showLoadArea}
+          onDragEnter={this.handleDragEnter}
+          onDragLeave={this.handleDragLeave}
+          onDragOver={this.handleDragOver}
         >
-          {this.props.name}
-        </DragItem>
+          Loading Zone
+        </LoadArea>
       </DragBoard>
     );
   }
