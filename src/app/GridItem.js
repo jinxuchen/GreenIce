@@ -41,60 +41,42 @@ export class GridItem extends React.Component {
       },
       move: false,
       moveX: 0,
-      moveY: 0
+      moveY: 0,
+      initialX: 0,
+      initialY: 0
     };
   }
 
   handleMouseMove = e => {
     e.preventDefault();
+    const initialX = this.gridItem.current.offsetLeft;
+    const initialY = this.gridItem.current.offsetTop;
 
-    if (this.state.move) {
-      /*ref to get offset as initial position*/
-      const initialX = this.gridItem.current.offsetLeft;
-      const initialY = this.gridItem.current.offsetTop;
+    const rect = this.gridItem.current.getBoundingClientRect();
+    const coords = {
+      a: { x: rect.left, y: rect.top },
+      b: { x: rect.left + rect.width, y: rect.top },
+      c: { x: rect.left, y: rect.top + rect.height },
+      d: { x: rect.left + rect.width, y: rect.top + rect.height }
+    };
 
-      /*rect to get current coords*/
-      const rect = this.gridItem.current.getBoundingClientRect();
-      const coords = {
-        a: { x: rect.left, y: rect.top },
-        b: { x: rect.left + rect.width, y: rect.top },
-        c: { x: rect.left, y: rect.top + rect.height },
-        d: { x: rect.left + rect.width, y: rect.top + rect.height }
-      };
-
-      /*moving algrithmn*/
-      const moveX = this.props.mouseX - initialX - 75;
-      const moveY = this.props.mouseY - initialY - 75;
-
-      this.setState({ moveX, moveY, coords });
-    }
+    this.setState({ coords, initialX, initialY });
   };
 
-  handleMouseDown = () => {
-    if (this.props.type === "drag") {
-      this.setState({ move: true });
-    }
-  };
+  handleMouseOut = () => {};
 
-  handleMouseUp = () => {
-    if (this.props.type === "drag") {
-      this.setState({ move: false });
-    }
-  };
+  handleMouseLeave = () => {};
 
   render() {
     return (
       <StyledItem
         type={this.props.type}
         ref={this.gridItem}
-        onMouseDown={this.handleMouseDown}
-        onMouseUp={this.handleMouseUp}
         onMouseMove={this.handleMouseMove}
-        move={this.state.move}
-        moveX={this.state.moveX}
-        moveY={this.state.moveY}
-        mouseX={this.props.mouseX}
-        mouseY={this.props.mouseY}
+        moveX={this.props.moveX}
+        moveY={this.props.moveY}
+        onMouseUp={this.props.onMouseUp}
+        onMouseDown={this.props.onMouseDown}
       >
         {this.props.name}
 
