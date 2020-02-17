@@ -32,25 +32,43 @@ export class Drag extends React.Component {
   constructor(props) {
     super(props);
 
-    this.gridItemRef = React.createRef();
+    this.gridItem1 = React.createRef();
+    this.gridItem2 = React.createRef();
     this.gridLoadZone = React.createRef();
 
     this.state = {
-      x: 0,
-      y: 0,
-      move: false,
       mouseX: 0,
       mouseY: 0,
-      moveX: 0,
-      moveY: 0,
-      cover: false,
 
+      cover: false,
       loadZoneCoords: {
         a: { x: 0, y: 0 },
         b: { x: 0, y: 0 },
         c: { x: 0, y: 0 },
         d: { x: 0, y: 0 }
       },
+
+      item: [
+        {
+          A: {
+            move: false,
+            moveX: 0,
+            moveY: 0,
+            initialX: 0,
+            initialY: 0,
+            coords: {
+              a: { x: 0, y: 0 },
+              b: { x: 0, y: 0 },
+              c: { x: 0, y: 0 },
+              d: { x: 0, y: 0 }
+            }
+          }
+        }
+      ],
+
+      move: false,
+      moveX: 0,
+      moveY: 0,
 
       itemCoords: {
         a: { x: 0, y: 0 },
@@ -80,9 +98,9 @@ export class Drag extends React.Component {
     e.preventDefault();
     if (this.state.move) {
       /*get itemInitialX itemInitialY itemCoords from GridItem state*/
-      const itemInitialX = this.gridItemRef.current.state.initialX;
-      const itemInitialY = this.gridItemRef.current.state.initialY;
-      const itemCoords = this.gridItemRef.current.state.coords;
+      const itemInitialX = this.gridItem1.current.state.initialX;
+      const itemInitialY = this.gridItem1.current.state.initialY;
+      const itemCoords = this.gridItem1.current.state.coords;
 
       const mouseX = e.clientX;
       const mouseY = e.clientY;
@@ -152,6 +170,15 @@ export class Drag extends React.Component {
     this.setState({ cover: true });
   };
 
+  handleClick = () => {
+    const itemPush = {
+      foo: "bar"
+    };
+    const arr = this.state.item;
+    arr.push(itemPush);
+    console.log(arr);
+  };
+
   render() {
     return (
       <DragBoard onMouseMove={this.handleMouseMove}>
@@ -160,7 +187,7 @@ export class Drag extends React.Component {
           name={this.props.name}
           moveX={this.state.moveX}
           moveY={this.state.moveY}
-          ref={this.gridItemRef}
+          ref={this.gridItem1}
           onMouseUp={this.handleMouseUp}
           onMouseDown={this.handleMouseDown}
         />

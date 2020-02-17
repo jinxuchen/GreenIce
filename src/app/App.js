@@ -1,6 +1,5 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
-import { Drag } from "./Drag";
 import {
   HeaderBar,
   BarItem,
@@ -11,6 +10,8 @@ import {
 import { FooterBar } from "../base/FooterBar";
 import { IconBars, IconCodepen, IconAppStore } from "../base/Icon";
 import { WalktheDog } from "./WalktheDog";
+import { Drag } from "./Drag";
+import { LoadArea } from "./LoadArea";
 
 const Header = styled.div`
   top: 0;
