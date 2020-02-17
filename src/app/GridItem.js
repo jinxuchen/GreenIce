@@ -41,66 +41,49 @@ export class GridItem extends React.Component {
       },
       move: false,
       moveX: 0,
-      moveY: 0
+      moveY: 0,
+      initialX: 0,
+      initialY: 0
     };
   }
 
   handleMouseMove = e => {
     e.preventDefault();
-    if (this.state.move) {
-      const mouseX = e.clientX;
-      const mouseY = e.clientY;
+    const initialX = this.gridItem.current.offsetLeft;
+    const initialY = this.gridItem.current.offsetTop;
 
-      const initialX = this.gridItem.current.offsetLeft;
-      const initialY = this.gridItem.current.offsetTop;
+    const rect = this.gridItem.current.getBoundingClientRect();
+    const coords = {
+      a: { x: rect.left, y: rect.top },
+      b: { x: rect.left + rect.width, y: rect.top },
+      c: { x: rect.left, y: rect.top + rect.height },
+      d: { x: rect.left + rect.width, y: rect.top + rect.height }
+    };
 
-      const rect = this.gridItem.current.getBoundingClientRect();
-
-      const coords = {
-        a: { x: rect.left, y: rect.top },
-        b: { x: rect.left + rect.width, y: rect.top },
-        c: { x: rect.left, y: rect.top + rect.height },
-        d: { x: rect.left + rect.width, y: rect.top + rect.height }
-      };
-
-      /*moving algrithmn*/
-      const moveX = mouseX - initialX - 75;
-      const moveY = mouseY - initialY - 75;
-
-      this.setState({ moveX, moveY, coords });
-    }
+    this.setState({ coords, initialX, initialY });
   };
 
-  handleMouseDown = () => {
-    if (this.props.type === "drag") {
-      this.setState({ move: true });
-    }
-  };
+  handleMouseOut = () => {};
 
-  handleMouseUp = () => {
-    if (this.props.type === "drag") {
-      this.setState({ move: false });
-    }
-  };
+  handleMouseLeave = () => {};
 
   render() {
     return (
       <StyledItem
-        ref={this.gridItem}
-        onMouseDown={this.handleMouseDown}
-        onMouseUp={this.handleMouseUp}
-        onMouseMove={this.handleMouseMove}
-        moveX={this.state.moveX}
-        moveY={this.state.moveY}
-        move={this.state.move}
         type={this.props.type}
+        ref={this.gridItem}
+        onMouseMove={this.handleMouseMove}
+        moveX={this.props.moveX}
+        moveY={this.props.moveY}
+        onMouseUp={this.props.onMouseUp}
+        onMouseDown={this.props.onMouseDown}
       >
         {this.props.name}
 
         <span>
-          {Math.round(this.props.currentX)}
+          {Math.round(this.state.coords.a.x)}
           {", "}
-          {Math.round(this.props.currentY)}
+          {Math.round(this.state.coords.a.y)}
         </span>
       </StyledItem>
     );

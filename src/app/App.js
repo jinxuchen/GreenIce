@@ -97,7 +97,6 @@ export class App extends React.Component {
 
         <PlayGround>
           <Drag name="drag me!" type="drag" showLoadArea={true} />
-          <Drag name="click me!" type="click" />
 
           <WalktheDog />
         </PlayGround>
