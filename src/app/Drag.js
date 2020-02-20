@@ -1,5 +1,9 @@
 import React from "react";
 import styled from "styled-components";
+
+import { connect } from "react-redux";
+import { addItem } from "./actions";
+
 import { GridItem } from "./GridItem";
 
 const DragBoard = styled.div`
@@ -171,12 +175,7 @@ export class Drag extends React.Component {
   };
 
   handleClick = () => {
-    const itemPush = {
-      foo: "bar"
-    };
-    const arr = this.state.item;
-    arr.push(itemPush);
-    console.log(arr);
+    this.props.onAddTodo();
   };
 
   render() {
@@ -193,6 +192,7 @@ export class Drag extends React.Component {
         />
 
         <LoadArea
+          onClick={this.props.onClick}
           show={this.props.showLoadArea}
           onDragEnter={this.handleDragEnter}
           onDragLeave={this.handleDragLeave}
@@ -206,3 +206,17 @@ export class Drag extends React.Component {
     );
   }
 }
+
+export const mapStateToProps = state => {
+  console.log("mapsta");
+  return { id: state.itemCount };
+};
+
+export const mapDispatchToProps = dispatch => ({
+  onClick: () => dispatch(addItem())
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Drag);
