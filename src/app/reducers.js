@@ -1,19 +1,23 @@
+import { findIndex } from "lodash";
+
 const initialState = {
   data: 0,
-  item: {
-    id: 0,
-    coords: {
-      a: { x: 0, y: 0 },
-      b: { x: 0, y: 0 },
-      c: { x: 0, y: 0 },
-      d: { x: 0, y: 0 }
-    },
-    itemInitialX: 0,
-    itemInitialY: 0,
-    moveX: 0,
-    moveY: 0,
-    cover: false
-  }
+  item: [
+    {
+      id: "",
+      coords: {
+        a: { x: 0, y: 0 },
+        b: { x: 0, y: 0 },
+        c: { x: 0, y: 0 },
+        d: { x: 0, y: 0 }
+      },
+      itemInitialX: 0,
+      itemInitialY: 0,
+      moveX: 0,
+      moveY: 0,
+      cover: false
+    }
+  ]
 };
 
 const addItem = (state = initialState, action) => {
@@ -26,22 +30,21 @@ const addItem = (state = initialState, action) => {
       return { ...state, data: originData + action.val };
 
     case "ADD_ITEM":
-      console.log("action: ", action);
-      console.log("state: ", state);
+      if (state.item[0].id === "") {
+        state.item[0] = { ...action };
+        return { ...state };
+      }
+
+      state.item.push({ ...action });
       return {
-        ...state,
-        item: {
-          moveX: action.moveX,
-          id: action.id
-        }
+        ...state
       };
 
     case "UPDATE_ITEM":
-      console.log("action: ", action);
-      console.log("state: ", state);
+      const targetIndex = findIndex(state.item, { id: action.id });
+      state.item[targetIndex] = { ...action };
       return {
-        ...state,
-        item: {}
+        ...state
       };
 
     default:

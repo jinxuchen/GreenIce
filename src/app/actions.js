@@ -7,18 +7,15 @@ export const addOne = id => {
 };
 
 export const addItem = itemInfo => {
-  console.log(itemInfo);
   return {
     type: "ADD_ITEM",
-    itemInfo: itemInfo
+    ...itemInfo
   };
 };
 
 export const updateItem = itemInfo => {
-  console.log(itemInfo);
   return {
     type: "UPDATE_ITEM",
-    id: itemInfo.id,
-    moveX: itemInfo.moveX
+    ...itemInfo
   };
 };
