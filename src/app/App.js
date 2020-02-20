@@ -10,7 +10,7 @@ import {
 import { FooterBar } from "../base/FooterBar";
 import { IconBars, IconCodepen, IconAppStore } from "../base/Icon";
 import { WalktheDog } from "./WalktheDog";
-import { Drag } from "./Drag";
+import Drag from "./Drag";
 import { LoadArea } from "./LoadArea";
 
 const Header = styled.div`

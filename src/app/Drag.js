@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { connect } from "react-redux";
-import { addItem } from "./actions";
+import { addOne } from "./actions";
 
 import { GridItem } from "./GridItem";
 
@@ -174,10 +174,6 @@ export class Drag extends React.Component {
     this.setState({ cover: true });
   };
 
-  handleClick = () => {
-    this.props.onAddTodo();
-  };
-
   render() {
     return (
       <DragBoard onMouseMove={this.handleMouseMove}>
@@ -192,7 +188,7 @@ export class Drag extends React.Component {
         />
 
         <LoadArea
-          onClick={this.props.onClick}
+          onClick={() => this.props.onClick(21)}
           show={this.props.showLoadArea}
           onDragEnter={this.handleDragEnter}
           onDragLeave={this.handleDragLeave}
@@ -200,7 +196,7 @@ export class Drag extends React.Component {
           ref={this.gridLoadZone}
           cover={this.state.cover}
         >
-          Loading Zone
+          {this.props.data}
         </LoadArea>
       </DragBoard>
     );
@@ -208,12 +204,14 @@ export class Drag extends React.Component {
 }
 
 export const mapStateToProps = state => {
-  console.log("mapsta");
-  return { id: state.itemCount };
+  console.log("mapStateToProps");
+  return { data: state.data };
 };
 
 export const mapDispatchToProps = dispatch => ({
-  onClick: () => dispatch(addItem())
+  onClick: value => {
+    dispatch(addOne(value));
+  }
 });
 
 export default connect(

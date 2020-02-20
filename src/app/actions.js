@@ -1,18 +1,24 @@
-let itemCount = 0;
-
-export const addItem = () => {
-  console.log("actions");
+export const addOne = id => {
+  console.log("id", id);
   return {
-    type: "ADD_ITEM",
-    id: (itemCount = itemCount + 1)
+    type: "ADD_ONE",
+    val: id
   };
 };
 
-/*
-const itemPush = {
-  foo: "bar"
+export const addItem = itemInfo => {
+  console.log(itemInfo);
+  return {
+    type: "ADD_ITEM",
+    itemInfo: itemInfo
+  };
 };
-const arr = this.state.item;
-arr.push(itemPush);
-console.log(arr);
-*/
+
+export const updateItem = itemInfo => {
+  console.log(itemInfo);
+  return {
+    type: "UPDATE_ITEM",
+    id: itemInfo.id,
+    moveX: itemInfo.moveX
+  };
+};
