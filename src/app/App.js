@@ -1,6 +1,5 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
-import { Drag } from "./Drag";
 import {
   HeaderBar,
   BarItem,
@@ -11,6 +10,8 @@ import {
 import { FooterBar } from "../base/FooterBar";
 import { IconBars, IconCodepen, IconAppStore } from "../base/Icon";
 import { WalktheDog } from "./WalktheDog";
+import Drag from "./Drag";
+import { LoadArea } from "./LoadArea";
 
 const Header = styled.div`
   top: 0;
@@ -118,6 +119,7 @@ export class App extends React.Component {
             </DialogItem>
           </Dialog>
         </ImageDialog>
+        <img src="https://img.webmd.com/dtmcms/live/webmd/consumer_assets/site_images/article_thumbnails/other/cat_relaxing_on_patio_other/1800x1200_cat_relaxing_on_patio_other.jpg?resize=750px:*" />
 
         <Footer>See ya latar!</Footer>
       </div>

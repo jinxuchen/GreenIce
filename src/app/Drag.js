@@ -1,6 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { GridItem } from "./GridItem";
+
+import { connect } from "react-redux";
+import { addOne, addItem } from "./actions";
+
+import GridItem from "./GridItem";
 
 const DragBoard = styled.div`
   background-color: white;
@@ -32,19 +36,15 @@ export class Drag extends React.Component {
   constructor(props) {
     super(props);
 
-    this.gridItemRef = React.createRef();
+    this.gridItem1 = React.createRef();
+    this.gridItem2 = React.createRef();
     this.gridLoadZone = React.createRef();
 
     this.state = {
-      x: 0,
-      y: 0,
-      move: false,
       mouseX: 0,
       mouseY: 0,
-      moveX: 0,
-      moveY: 0,
-      cover: false,
 
+      cover: false,
       loadZoneCoords: {
         a: { x: 0, y: 0 },
         b: { x: 0, y: 0 },
@@ -52,15 +52,21 @@ export class Drag extends React.Component {
         d: { x: 0, y: 0 }
       },
 
-      itemCoords: {
-        a: { x: 0, y: 0 },
-        b: { x: 0, y: 0 },
-        c: { x: 0, y: 0 },
-        d: { x: 0, y: 0 }
-      },
-
-      itemInitialX: 0,
-      itemInitialY: 0
+      item: {
+        move: false,
+        moveX: 0,
+        moveY: 0,
+        moveX: 0,
+        moveY: 0,
+        initialX: 0,
+        initialY: 0,
+        coords: {
+          a: { x: 0, y: 0 },
+          b: { x: 0, y: 0 },
+          c: { x: 0, y: 0 },
+          d: { x: 0, y: 0 }
+        }
+      }
     };
   }
 
@@ -78,29 +84,14 @@ export class Drag extends React.Component {
 
   handleMouseMove = e => {
     e.preventDefault();
-    if (this.state.move) {
-      /*get itemInitialX itemInitialY itemCoords from GridItem state*/
-      const itemInitialX = this.gridItemRef.current.state.initialX;
-      const itemInitialY = this.gridItemRef.current.state.initialY;
-      const itemCoords = this.gridItemRef.current.state.coords;
 
+    if (this.state.move) {
       const mouseX = e.clientX;
       const mouseY = e.clientY;
 
-      const moveX = mouseX - itemInitialX - 75;
-      const moveY = mouseY - itemInitialY - 75;
-      console.log(itemInitialY);
-
-      this.setState({
-        itemCoords,
-        itemInitialX,
-        itemInitialY,
-        mouseX,
-        mouseY,
-        moveX,
-        moveY
-      });
-
+      const moveX = mouseX - this.props.initialX - 75;
+      const moveY = mouseY - this.props.initialY - 75;
+      this.setState({ item: { moveX, moveY } });
       this.checkCover();
     }
   };
@@ -109,7 +100,6 @@ export class Drag extends React.Component {
     if (this.props.type === "drag") {
       this.setState({ move: true });
     }
-    console.log(this.props.type);
   };
 
   handleMouseUp = () => {
@@ -118,18 +108,8 @@ export class Drag extends React.Component {
     }
   };
 
-  handleDragEnter = e => {
-    e.target.style.color = "red";
-    console.log(e.target.style);
-  };
-
-  handleDragOver = e => {
-    e.target.style.color = "red";
-    console.log(e.target.style);
-  };
-
   checkCover = () => {
-    const i = this.state.itemCoords;
+    const i = this.props.coords;
     const l = this.state.loadZoneCoords;
 
     if (i.a.x <= l.a.x && i.b.x <= l.a.x) {
@@ -156,26 +136,53 @@ export class Drag extends React.Component {
     return (
       <DragBoard onMouseMove={this.handleMouseMove}>
         <GridItem
+          id="1"
           type={this.props.type}
           name={this.props.name}
-          moveX={this.state.moveX}
-          moveY={this.state.moveY}
-          ref={this.gridItemRef}
+          moveX={this.state.item.moveX}
+          moveY={this.state.item.moveY}
           onMouseUp={this.handleMouseUp}
           onMouseDown={this.handleMouseDown}
+          move={this.state.move}
         />
 
         <LoadArea
+          onClick={() => this.props.onAddOne(21)}
           show={this.props.showLoadArea}
-          onDragEnter={this.handleDragEnter}
-          onDragLeave={this.handleDragLeave}
-          onDragOver={this.handleDragOver}
           ref={this.gridLoadZone}
           cover={this.state.cover}
         >
-          Loading Zone
+          {this.props.data}
         </LoadArea>
       </DragBoard>
     );
   }
 }
+
+export const mapStateToProps = state => {
+  const item = state.item[0];
+  const coords = item.coords;
+  const initialX = item.initialX;
+  const initialY = item.initialY;
+
+  return {
+    data: state.data,
+    coords,
+    initialX,
+    initialY
+  };
+};
+
+export const mapDispatchToProps = dispatch => ({
+  onAddOne: value => {
+    dispatch(addOne(value));
+  },
+  onAddItem: itemInfo => {
+    dispatch(addItem(itemInfo));
+  }
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Drag);
