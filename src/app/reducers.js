@@ -32,42 +32,33 @@ const getTargetItem = (state, id) => {
 };
 
 const addItem = (state = initialState, action) => {
-  let index;
+  const targetIndex = getTargetIndex(state, action.id);
   switch (action.type) {
-    case "ADD_ONE":
-      const originData = state.data;
-
-      return { ...state, data: originData + action.val };
-
     case "ADD_ITEM":
       if (state.item[0].id === "") {
         state.item[0] = { ...action };
         return { ...state };
       }
-
       state.item.push({ ...action });
       return {
         ...state
       };
 
     case "UPDATE_MOVE":
-      index = getTargetIndex(state, action.id);
-      state.item[index].move = action.move;
+      state.item[targetIndex].move = action.move;
       return {
         ...state
       };
 
     case "UPDATE_COORDS":
-      index = getTargetIndex(state, action.id);
-      state.item[index].coords = action.coords;
+      state.item[targetIndex].coords = action.coords;
       return {
         ...state
       };
 
     case "UPDATE_MOVE_XY":
-      index = getTargetIndex(state, action.id);
-      state.item[index].moveX = action.moveX;
-      state.item[index].moveY = action.moveY;
+      state.item[targetIndex].moveX = action.moveX;
+      state.item[targetIndex].moveY = action.moveY;
 
       return {
         ...state

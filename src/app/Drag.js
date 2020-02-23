@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { connect } from "react-redux";
-import { addOne, addItem, updateMoveXY } from "./actions";
+import { updateMoveXY } from "./actions";
 import { findIndex } from "lodash";
 
 import GridItem from "./GridItem";
@@ -42,25 +42,8 @@ export class Drag extends React.Component {
     this.gridLoadZone = React.createRef();
 
     this.state = {
-      mouseX: 0,
-      mouseY: 0,
-
       cover: false,
       loadZoneCoords: {
-        a: { x: 0, y: 0 },
-        b: { x: 0, y: 0 },
-        c: { x: 0, y: 0 },
-        d: { x: 0, y: 0 }
-      },
-
-      move: false,
-      moveX: 0,
-      moveY: 0,
-      moveX: 0,
-      moveY: 0,
-      initialX: 0,
-      initialY: 0,
-      coords: {
         a: { x: 0, y: 0 },
         b: { x: 0, y: 0 },
         c: { x: 0, y: 0 },
@@ -124,25 +107,9 @@ export class Drag extends React.Component {
   render() {
     return (
       <DragBoard onMouseMove={this.handleMouseMove}>
-        <GridItem
-          id="1"
-          type={this.props.type}
-          name={this.props.name}
-          onMouseUp={this.handleMouseUp}
-          onMouseDown={this.handleMouseDown}
-          move={this.props.move}
-        />
-        <GridItem
-          id="2"
-          type={this.props.type}
-          name={this.props.name}
-          onMouseUp={this.handleMouseUp}
-          onMouseDown={this.handleMouseDown}
-          move={this.props.move}
-        />
+        <GridItem id="1" type={this.props.type} name={this.props.name} />
 
         <LoadArea
-          onClick={() => this.props.onAddOne(21)}
           show={this.props.showLoadArea}
           ref={this.gridLoadZone}
           cover={this.state.cover}
@@ -163,10 +130,10 @@ export const mapStateToProps = state => {
   let move = false;
   let id;
 
+  //get moving item index
   index = findIndex(state.item, { move: true });
   moveItem = state.item[index];
 
-  // console.log(moveItem);
   if (index !== -1) {
     coords = moveItem.coords;
     initialX = moveItem.initialX;
@@ -186,12 +153,6 @@ export const mapStateToProps = state => {
 };
 
 export const mapDispatchToProps = dispatch => ({
-  onAddOne: value => {
-    dispatch(addOne(value));
-  },
-  onAddItem: itemInfo => {
-    dispatch(addItem(itemInfo));
-  },
   onUpdateMoveXY: (id, moveX, moveY) => {
     dispatch(updateMoveXY(id, moveX, moveY));
   }
