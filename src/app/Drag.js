@@ -2,7 +2,8 @@ import React from "react";
 import styled from "styled-components";
 
 import { connect } from "react-redux";
-import { addOne, addItem } from "./actions";
+import { addOne, addItem, updateMoveXY } from "./actions";
+import { findIndex } from "lodash";
 
 import GridItem from "./GridItem";
 
@@ -52,20 +53,18 @@ export class Drag extends React.Component {
         d: { x: 0, y: 0 }
       },
 
-      item: {
-        move: false,
-        moveX: 0,
-        moveY: 0,
-        moveX: 0,
-        moveY: 0,
-        initialX: 0,
-        initialY: 0,
-        coords: {
-          a: { x: 0, y: 0 },
-          b: { x: 0, y: 0 },
-          c: { x: 0, y: 0 },
-          d: { x: 0, y: 0 }
-        }
+      move: false,
+      moveX: 0,
+      moveY: 0,
+      moveX: 0,
+      moveY: 0,
+      initialX: 0,
+      initialY: 0,
+      coords: {
+        a: { x: 0, y: 0 },
+        b: { x: 0, y: 0 },
+        c: { x: 0, y: 0 },
+        d: { x: 0, y: 0 }
       }
     };
   }
@@ -85,26 +84,16 @@ export class Drag extends React.Component {
   handleMouseMove = e => {
     e.preventDefault();
 
-    if (this.state.move) {
+    if (this.props.move) {
       const mouseX = e.clientX;
       const mouseY = e.clientY;
 
       const moveX = mouseX - this.props.initialX - 75;
       const moveY = mouseY - this.props.initialY - 75;
-      this.setState({ item: { moveX, moveY } });
+
       this.checkCover();
-    }
-  };
 
-  handleMouseDown = () => {
-    if (this.props.type === "drag") {
-      this.setState({ move: true });
-    }
-  };
-
-  handleMouseUp = () => {
-    if (this.props.type === "drag") {
-      this.setState({ move: false });
+      this.props.onUpdateMoveXY(this.props.id, moveX, moveY);
     }
   };
 
@@ -139,11 +128,17 @@ export class Drag extends React.Component {
           id="1"
           type={this.props.type}
           name={this.props.name}
-          moveX={this.state.item.moveX}
-          moveY={this.state.item.moveY}
           onMouseUp={this.handleMouseUp}
           onMouseDown={this.handleMouseDown}
-          move={this.state.move}
+          move={this.props.move}
+        />
+        <GridItem
+          id="2"
+          type={this.props.type}
+          name={this.props.name}
+          onMouseUp={this.handleMouseUp}
+          onMouseDown={this.handleMouseDown}
+          move={this.props.move}
         />
 
         <LoadArea
@@ -160,16 +155,33 @@ export class Drag extends React.Component {
 }
 
 export const mapStateToProps = state => {
-  const item = state.item[0];
-  const coords = item.coords;
-  const initialX = item.initialX;
-  const initialY = item.initialY;
+  let coords;
+  let initialX;
+  let initialY;
+  let index;
+  let moveItem;
+  let move = false;
+  let id;
+
+  index = findIndex(state.item, { move: true });
+  moveItem = state.item[index];
+
+  // console.log(moveItem);
+  if (index !== -1) {
+    coords = moveItem.coords;
+    initialX = moveItem.initialX;
+    initialY = moveItem.initialY;
+    move = moveItem.move;
+    id = moveItem.id;
+  }
 
   return {
     data: state.data,
     coords,
     initialX,
-    initialY
+    initialY,
+    move,
+    id
   };
 };
 
@@ -179,6 +191,9 @@ export const mapDispatchToProps = dispatch => ({
   },
   onAddItem: itemInfo => {
     dispatch(addItem(itemInfo));
+  },
+  onUpdateMoveXY: (id, moveX, moveY) => {
+    dispatch(updateMoveXY(id, moveX, moveY));
   }
 });
 
