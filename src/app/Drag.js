@@ -6,6 +6,7 @@ import { updateMoveXY } from "./actions";
 import { findIndex } from "lodash";
 
 import GridItem from "./GridItem";
+import LoadArea from "./LoadArea";
 
 const DragBoard = styled.div`
   background-color: white;
@@ -14,55 +15,10 @@ const DragBoard = styled.div`
   user-select: none;
 `;
 
-const LoadArea = styled.div.attrs(props => ({
-  style: {
-    display: props.show ? "flex" : "none",
-    backgroundColor: props.cover ? "green" : ""
-  }
-}))`
-  justify-content: center;
-  align-items: center;
-  color: black;
-  opacity: 0.7;
-  font-size: 40px;
-  z-index: 1;
-
-  margin-left: 30px;
-  width: 300px;
-  height: 200px;
-  border: 3px dashed black;
-`;
-
 export class Drag extends React.Component {
   constructor(props) {
     super(props);
-
-    this.gridItem1 = React.createRef();
-    this.gridItem2 = React.createRef();
-    this.gridLoadZone = React.createRef();
-
-    this.state = {
-      cover: false,
-      loadZoneCoords: {
-        a: { x: 0, y: 0 },
-        b: { x: 0, y: 0 },
-        c: { x: 0, y: 0 },
-        d: { x: 0, y: 0 }
-      }
-    };
   }
-
-  componentDidMount = () => {
-    const rect = this.gridLoadZone.current.getBoundingClientRect();
-    const loadZoneCoords = {
-      a: { x: rect.left, y: rect.top },
-      b: { x: rect.left + rect.width, y: rect.top },
-      c: { x: rect.left, y: rect.top + rect.height },
-      d: { x: rect.left + rect.width, y: rect.top + rect.height }
-    };
-
-    this.setState({ loadZoneCoords });
-  };
 
   handleMouseMove = e => {
     e.preventDefault();
@@ -109,13 +65,7 @@ export class Drag extends React.Component {
       <DragBoard onMouseMove={this.handleMouseMove}>
         <GridItem id="1" type={this.props.type} name={this.props.name} />
 
-        <LoadArea
-          show={this.props.showLoadArea}
-          ref={this.gridLoadZone}
-          cover={this.state.cover}
-        >
-          {this.props.data}
-        </LoadArea>
+        <LoadArea ref={this.gridLoadZone}>{this.props.data}</LoadArea>
       </DragBoard>
     );
   }

@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import { connect } from "react-redux";
+import { findIndex } from "lodash";
 
 const StyledLoadArea = styled.div.attrs(props => ({
   style: {
@@ -22,9 +24,38 @@ const StyledLoadArea = styled.div.attrs(props => ({
 export class LoadArea extends React.Component {
   constructor(props) {
     super(props);
+    this.gridLoadZone = React.createRef();
+
+    this.state = {
+      coords: {}
+    };
   }
 
+  componentDidMount = () => {
+    const rect = this.gridLoadZone.current.getBoundingClientRect();
+    const coords = {
+      a: { x: rect.left, y: rect.top },
+      b: { x: rect.left + rect.width, y: rect.top },
+      c: { x: rect.left, y: rect.top + rect.height },
+      d: { x: rect.left + rect.width, y: rect.top + rect.height }
+    };
+
+    this.setState({ coords });
+  };
+
   render() {
-    return <StyledLoadArea cover={this.props.cover}>Load Area</StyledLoadArea>;
+    return (
+      <StyledLoadArea ref={this.gridLoadZone} cover={this.props.cover}>
+        Load Area
+      </StyledLoadArea>
+    );
   }
 }
+
+const mapStateToProps = state => {};
+
+const mapDispatchToProps = dispatch => {};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LoadArea);
