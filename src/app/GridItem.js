@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { updateItem, addOne, addItem } from "./actions";
-import { chunk } from "lodash";
+import { updateMove, updateCoords, addOne, addItem } from "./actions";
+import { findIndex } from "lodash";
 
 const StyledItem = styled.div.attrs(props => ({
   style: {
@@ -56,11 +56,11 @@ export class GridItem extends React.Component {
     const initialY = this.gridItem.current.offsetTop;
 
     this.setState({ initialX, initialY });
-    this.props.onAddItem(this.state);
+    this.props.onAddItem({ ...this.state, initialX, initialY });
   };
 
   handleMouseMove = e => {
-    if (this.props.move) {
+    if (this.state.move) {
       e.preventDefault();
 
       const rect = this.gridItem.current.getBoundingClientRect();
@@ -74,14 +74,26 @@ export class GridItem extends React.Component {
       this.setState({ coords });
 
       //pass item json to store
-      this.props.onUpdateItem(this.state);
+      this.props.onUpdateCoords(this.state.id, this.state.coords);
+    }
+  };
+
+  handleMouseDown = () => {
+    if (this.props.type === "drag") {
+      this.setState({ move: true });
+      this.props.onUpdateMove(this.state.id, true);
+    }
+  };
+
+  handleMouseUp = () => {
+    if (this.props.type === "drag") {
+      this.setState({ move: false });
+      this.props.onUpdateMove(this.state.id, false);
     }
   };
 
   handleClick = () => {
     this.props.onAddItem(this.state);
-    console.log("this.props.item");
-    console.log(this.props.item);
   };
 
   render() {
@@ -93,9 +105,9 @@ export class GridItem extends React.Component {
         onMouseMove={this.handleMouseMove}
         moveX={this.props.moveX}
         moveY={this.props.moveY}
-        onMouseUp={this.props.onMouseUp}
-        onMouseDown={this.props.onMouseDown}
-        move={this.props.move}
+        onMouseUp={this.handleMouseUp}
+        onMouseDown={this.handleMouseDown}
+        move={this.state.move}
       >
         {this.props.name}
 
@@ -108,19 +120,41 @@ export class GridItem extends React.Component {
   }
 }
 
-export const mapStateToProps = state => ({
-  data: state.data,
-  item: state.item
-});
+export const mapStateToProps = (state, ownProps) => {
+  let index;
+  let targetItem;
+  let moveX;
+  let moveY;
+
+  index = findIndex(state.item, { id: ownProps.id });
+  if (index !== -1) {
+    targetItem = state.item[index];
+
+    moveX = targetItem.moveX;
+    moveY = targetItem.moveY;
+  }
+
+  return {
+    data: state.data,
+    item: state.item,
+    moveX,
+    moveY
+  };
+};
 
 export const mapDispatchToProps = dispatch => ({
   onAddItem: itemInfo => {
     dispatch(addItem(itemInfo));
   },
 
-  onUpdateItem: itemInfo => {
-    dispatch(updateItem(itemInfo));
+  onUpdateMove: (id, move) => {
+    dispatch(updateMove(id, move));
   },
+
+  onUpdateCoords: (id, coords) => {
+    dispatch(updateCoords(id, coords));
+  },
+
   onAddOne: value => {
     dispatch(addOne(value));
   }
