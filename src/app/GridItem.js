@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { updateMove, updateCoords, addOne, addItem } from "./actions";
+import { updateMove, updateCoords, addItem } from "./actions";
 import { findIndex } from "lodash";
 
 const StyledItem = styled.div.attrs(props => ({
@@ -13,7 +13,7 @@ const StyledItem = styled.div.attrs(props => ({
   }
 }))`
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: start;
   color: white;
   font-size: 35px;
@@ -55,7 +55,6 @@ export class GridItem extends React.Component {
     const initialX = this.gridItem.current.offsetLeft;
     const initialY = this.gridItem.current.offsetTop;
 
-    this.setState({ initialX, initialY });
     this.props.onAddItem({ ...this.state, initialX, initialY });
   };
 
@@ -92,10 +91,6 @@ export class GridItem extends React.Component {
     }
   };
 
-  handleClick = () => {
-    this.props.onAddItem(this.state);
-  };
-
   render() {
     return (
       <StyledItem
@@ -103,18 +98,15 @@ export class GridItem extends React.Component {
         type={this.props.type}
         ref={this.gridItem}
         onMouseMove={this.handleMouseMove}
-        moveX={this.props.moveX}
-        moveY={this.props.moveY}
         onMouseUp={this.handleMouseUp}
         onMouseDown={this.handleMouseDown}
-        move={this.state.move}
+        moveX={this.props.moveX}
+        moveY={this.props.moveY}
       >
         {this.props.name}
-
-        <button onClick={this.handleClick}>Add Item</button>
-        {Math.round(this.state.coords.a.x)}
+        ({Math.round(this.state.coords.a.x)}
         {", "}
-        {Math.round(this.state.coords.a.y)}
+        {Math.round(this.state.coords.a.y)})
       </StyledItem>
     );
   }
@@ -153,10 +145,6 @@ export const mapDispatchToProps = dispatch => ({
 
   onUpdateCoords: (id, coords) => {
     dispatch(updateCoords(id, coords));
-  },
-
-  onAddOne: value => {
-    dispatch(addOne(value));
   }
 });
 
