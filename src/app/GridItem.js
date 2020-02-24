@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { updateMove, updateCoords, addOne, addItem } from "./actions";
+import { updateMove, updateCoords, addItem } from "./actions";
 import { findIndex } from "lodash";
 
 const StyledItem = styled.div.attrs(props => ({
@@ -18,8 +18,8 @@ const StyledItem = styled.div.attrs(props => ({
   color: white;
   font-size: 35px;
 
-  height: 150px;
-  width: 150px;
+  height: 140px;
+  width: 140px;
 
   cursor: pointer;
   position: relative;
@@ -145,10 +145,6 @@ export const mapDispatchToProps = dispatch => ({
 
   onUpdateCoords: (id, coords) => {
     dispatch(updateCoords(id, coords));
-  },
-
-  onAddOne: value => {
-    dispatch(addOne(value));
   }
 });
 
