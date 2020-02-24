@@ -97,7 +97,7 @@ export class App extends React.Component {
         <Header>what up!</Header>
 
         <PlayGround>
-          <Drag name="drag me!" type="drag" showLoadArea={true} />
+          <Drag name="drag me!" type="drag" />
 
           <WalktheDog />
         </PlayGround>

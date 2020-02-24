@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { updateMove, updateCoords, addOne, addItem } from "./actions";
+import { updateMove, updateCoords, addItem } from "./actions";
 import { findIndex } from "lodash";
 
 const StyledItem = styled.div.attrs(props => ({
@@ -18,8 +18,8 @@ const StyledItem = styled.div.attrs(props => ({
   color: white;
   font-size: 35px;
 
-  height: 150px;
-  width: 150px;
+  height: 140px;
+  width: 140px;
 
   cursor: pointer;
   position: relative;
@@ -91,6 +91,18 @@ export class GridItem extends React.Component {
     }
   };
 
+  handleClick = () => {
+    if (this.props.type === "click") {
+      if (this.state.move) {
+        this.setState({ move: false });
+        this.props.onUpdateMove(this.state.id, false);
+      } else {
+        this.setState({ move: true });
+        this.props.onUpdateMove(this.state.id, true);
+      }
+    }
+  };
+
   render() {
     return (
       <StyledItem
@@ -102,6 +114,7 @@ export class GridItem extends React.Component {
         onMouseDown={this.handleMouseDown}
         moveX={this.props.moveX}
         moveY={this.props.moveY}
+        onClick={this.handleClick}
       >
         {this.props.name}
         ({Math.round(this.state.coords.a.x)}
@@ -145,10 +158,6 @@ export const mapDispatchToProps = dispatch => ({
 
   onUpdateCoords: (id, coords) => {
     dispatch(updateCoords(id, coords));
-  },
-
-  onAddOne: value => {
-    dispatch(addOne(value));
   }
 });
 
