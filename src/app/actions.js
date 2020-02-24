@@ -45,3 +45,12 @@ export const updateMoveXY = (id, moveX, moveY) => {
     moveY
   };
 };
+
+export const updateCover = (cover, x, y) => {
+  return {
+    type: "UPDATE_COVER",
+    cover,
+    x,
+    y
+  };
+};

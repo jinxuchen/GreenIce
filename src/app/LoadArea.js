@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { findIndex } from "lodash";
+import { findIndex, map } from "lodash";
 import GridPiece from "./GridPiece";
 import { addLoadArea } from "./actions";
 
@@ -9,8 +9,8 @@ const StyledLoadArea = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-row: 1fr 1fr 1fr 1fr;
-  width: 280px;
-  height: 280px;
+  width: 282px;
+  height: 282px;
   border: 3px dashed black;
 `;
 
@@ -44,30 +44,136 @@ export class LoadArea extends React.Component {
 
   render() {
     return (
-      <StyledLoadArea ref={this.gridLoadZone} cover={this.props.cover}>
-        <GridPiece maxWidth={4} maxHeight={4} />
-        <GridPiece maxWidth={4} maxHeight={4} />
-        <GridPiece maxWidth={4} maxHeight={4} />
-        <GridPiece maxWidth={4} maxHeight={4} />
-        <GridPiece maxWidth={4} maxHeight={4} />
-        <GridPiece maxWidth={4} maxHeight={4} />
-        <GridPiece maxWidth={4} maxHeight={4} />
-        <GridPiece maxWidth={4} maxHeight={4} />
-        <GridPiece maxWidth={4} maxHeight={4} />
-        <GridPiece maxWidth={4} maxHeight={4} />
-        <GridPiece maxWidth={4} maxHeight={4} />
-        <GridPiece maxWidth={4} maxHeight={4} />
-        <GridPiece maxWidth={4} maxHeight={4} />
-        <GridPiece maxWidth={4} maxHeight={4} />
-        <GridPiece maxWidth={4} maxHeight={4} />
-        <GridPiece maxWidth={4} maxHeight={4} />
+      <StyledLoadArea
+        ref={this.gridLoadZone}
+        cover={this.props.cover}
+        gridMap={this.props.gridMap}
+      >
+        <GridPiece
+          maxWidth={4}
+          maxHeight={4}
+          cover={
+            this.props.grid.length > 1 ? this.props.grid[0][0].cover : false
+          }
+        />
+        <GridPiece
+          maxWidth={4}
+          maxHeight={4}
+          cover={
+            this.props.grid.length > 1 ? this.props.grid[0][1].cover : false
+          }
+        />
+        <GridPiece
+          maxWidth={4}
+          maxHeight={4}
+          cover={
+            this.props.grid.length > 1 ? this.props.grid[0][2].cover : false
+          }
+        />
+        <GridPiece
+          maxWidth={4}
+          maxHeight={4}
+          cover={
+            this.props.grid.length > 1 ? this.props.grid[0][3].cover : false
+          }
+        />
+        <GridPiece
+          maxWidth={4}
+          maxHeight={4}
+          cover={
+            this.props.grid.length > 1 ? this.props.grid[1][0].cover : false
+          }
+        />
+        <GridPiece
+          maxWidth={4}
+          maxHeight={4}
+          cover={
+            this.props.grid.length > 1 ? this.props.grid[1][1].cover : false
+          }
+        />
+        <GridPiece
+          maxWidth={4}
+          maxHeight={4}
+          cover={
+            this.props.grid.length > 1 ? this.props.grid[1][2].cover : false
+          }
+        />
+        <GridPiece
+          maxWidth={4}
+          maxHeight={4}
+          cover={
+            this.props.grid.length > 1 ? this.props.grid[1][3].cover : false
+          }
+        />
+        <GridPiece
+          maxWidth={4}
+          maxHeight={4}
+          cover={
+            this.props.grid.length > 1 ? this.props.grid[2][0].cover : false
+          }
+        />
+        <GridPiece
+          maxWidth={4}
+          maxHeight={4}
+          cover={
+            this.props.grid.length > 1 ? this.props.grid[2][1].cover : false
+          }
+        />
+        <GridPiece
+          maxWidth={4}
+          maxHeight={4}
+          cover={
+            this.props.grid.length > 1 ? this.props.grid[2][2].cover : false
+          }
+        />
+        <GridPiece
+          maxWidth={4}
+          maxHeight={4}
+          cover={
+            this.props.grid.length > 1 ? this.props.grid[2][3].cover : false
+          }
+        />
+        <GridPiece
+          maxWidth={4}
+          maxHeight={4}
+          cover={
+            this.props.grid.length > 1 ? this.props.grid[3][0].cover : false
+          }
+        />
+        <GridPiece
+          maxWidth={4}
+          maxHeight={4}
+          cover={
+            this.props.grid.length > 1 ? this.props.grid[3][1].cover : false
+          }
+        />
+        <GridPiece
+          maxWidth={4}
+          maxHeight={4}
+          cover={
+            this.props.grid.length > 1 ? this.props.grid[3][2].cover : false
+          }
+        />
+        <GridPiece
+          maxWidth={4}
+          maxHeight={4}
+          cover={
+            this.props.grid.length > 1 ? this.props.grid[3][3].cover : false
+          }
+        />
       </StyledLoadArea>
     );
   }
 }
 
 const mapStateToProps = state => {
-  return {};
+  let grid;
+
+  grid = state.grid;
+
+  return {
+    grid
+  };
 };
 
 const mapDispatchToProps = dispatch => {

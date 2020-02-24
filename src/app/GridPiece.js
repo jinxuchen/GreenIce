@@ -34,7 +34,8 @@ export class GridPiece extends React.Component {
         c: { x: 0, y: 0 },
         d: { x: 0, y: 0 }
       },
-      hover: false
+      hover: false,
+      cover: false
     };
   }
 
@@ -77,13 +78,16 @@ export class GridPiece extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
   let coords;
   let index;
   let moveItem;
   let move = false;
   let id;
   let loadAreaCoords;
+  let gridMap;
+
+  gridMap = state.grid;
 
   loadAreaCoords = Object.assign({}, state.loadArea.coords);
 
@@ -97,7 +101,8 @@ const mapStateToProps = state => {
 
   return {
     loadAreaCoords,
-    coords
+    coords,
+    gridMap
   };
 };
 

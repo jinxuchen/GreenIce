@@ -18,8 +18,8 @@ const StyledItem = styled.div.attrs(props => ({
   color: white;
   font-size: 35px;
 
-  height: 150px;
-  width: 150px;
+  height: 140px;
+  width: 140px;
 
   cursor: pointer;
   position: relative;

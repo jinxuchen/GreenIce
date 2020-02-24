@@ -39,7 +39,19 @@ const initialState = {
             }
           ]
         ]*/
-  grid: [[]]
+  grid: [
+    [
+      {
+        coords: {
+          a: { x: 0, y: 0 },
+          b: { x: 0, y: 0 },
+          c: { x: 0, y: 0 },
+          d: { x: 0, y: 0 }
+        },
+        cover: false
+      }
+    ]
+  ]
 };
 
 const getTargetIndex = (state, id) => {
@@ -107,6 +119,13 @@ const addItem = (state = initialState, action) => {
     case "UPDATE_MOVE_XY":
       state.item[targetIndex].moveX = action.moveX;
       state.item[targetIndex].moveY = action.moveY;
+
+      return {
+        ...state
+      };
+
+    case "UPDATE_COVER":
+      state.grid[action.x][action.y].cover = action.cover;
 
       return {
         ...state

@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { connect } from "react-redux";
-import { updateMoveXY } from "./actions";
+import { updateMoveXY, updateCover } from "./actions";
 import { findIndex } from "lodash";
 
 import GridItem from "./GridItem";
@@ -25,7 +25,7 @@ export class Drag extends React.Component {
     const width = this.props.gridPieces[0];
     const height = this.props.gridPieces.length;
 
-    if (!this.props.move) {
+    if (this.props.move) {
       const mouseX = e.clientX;
       const mouseY = e.clientY;
 
@@ -34,10 +34,11 @@ export class Drag extends React.Component {
 
       const width = this.props.gridPieces[0].length;
       const height = this.props.gridPieces.length;
+
       for (let i = 0; i < height; i++) {
         for (let j = 0; j < width; j++) {
           const gridPiece = this.props.gridPieces[i][j];
-          this.checkCover(gridPiece);
+          this.checkCover(gridPiece, i, j);
         }
       }
 
@@ -45,36 +46,39 @@ export class Drag extends React.Component {
     }
   };
 
-  checkCover = gridPiece => {
+  checkCover = (gridPiece, x, y) => {
     const i = this.props.coords;
     const l = gridPiece;
 
     if (i.a.x <= l.a.x && i.b.x <= l.a.x) {
-      this.setState({ cover: false });
+      this.props.onUpdateCover(false, x, y);
       return;
     }
     if (i.a.x >= l.b.x && i.b.x >= l.b.x) {
-      this.setState({ cover: false });
+      this.props.onUpdateCover(false, x, y);
       return;
     }
     if (i.a.y <= l.a.y && i.c.y <= l.a.y) {
-      this.setState({ cover: false });
+      this.props.onUpdateCover(false, x, y);
       return;
     }
     if (i.a.y >= l.c.y && i.c.y >= l.c.y) {
-      this.setState({ cover: false });
+      this.props.onUpdateCover(false, x, y);
       return;
     }
 
-    this.setState({ cover: true });
+    this.props.onUpdateCover(true, x, y);
   };
 
   render() {
     return (
       <DragBoard onMouseMove={this.handleMouseMove}>
         <GridItem id="1" type={this.props.type} name={this.props.name} />
+        <GridItem id="2" type={this.props.type} name={this.props.name} />
 
-        <LoadArea ref={this.gridLoadZone}>{this.props.data}</LoadArea>
+        <LoadArea ref={this.gridLoadZone} gridMap={this.props.gridMap}>
+          {this.props.data}
+        </LoadArea>
       </DragBoard>
     );
   }
@@ -97,6 +101,19 @@ export const mapStateToProps = state => {
 
   gridPieces = state.grid;
 
+  const gridPiecesHeight = gridPieces.length;
+  const gridPiecesWidth = gridPieces[0].length;
+
+  let gridMap = [];
+
+  for (let i = 0; i < gridPiecesHeight; i++) {
+    gridMap.push([]);
+    for (let j = 0; j < gridPiecesWidth; j++) {
+      const cover = gridPieces[i][j].cover;
+      gridMap[i][j] = cover;
+    }
+  }
+
   //get moving item index
   index = findIndex(state.item, { move: true });
   moveItem = state.item[index];
@@ -108,7 +125,6 @@ export const mapStateToProps = state => {
     move = moveItem.move;
     id = moveItem.id;
   }
-  console.log(coords);
 
   return {
     gridPieces,
@@ -116,13 +132,18 @@ export const mapStateToProps = state => {
     initialX,
     initialY,
     move,
-    id
+    id,
+    gridMap
   };
 };
 
 export const mapDispatchToProps = dispatch => ({
   onUpdateMoveXY: (id, moveX, moveY) => {
     dispatch(updateMoveXY(id, moveX, moveY));
+  },
+
+  onUpdateCover: (cover, x, y) => {
+    dispatch(updateCover(cover, x, y));
   }
 });
 
