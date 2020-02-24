@@ -2,22 +2,15 @@ import React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { findIndex } from "lodash";
+import GridPiece from "./GridPiece";
+import { addLoadArea } from "./actions";
 
-const StyledLoadArea = styled.div.attrs(props => ({
-  style: {
-    backgroundColor: props.cover ? "green" : ""
-  }
-}))`
-  justify-content: center;
-  align-items: center;
-  color: black;
-  opacity: 0.7;
-  font-size: 40px;
-  z-index: 1;
-
-  margin-left: 30px;
-  width: 300px;
-  height: 200px;
+const StyledLoadArea = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-row: 1fr 1fr 1fr 1fr;
+  width: 280px;
+  height: 280px;
   border: 3px dashed black;
 `;
 
@@ -27,7 +20,12 @@ export class LoadArea extends React.Component {
     this.gridLoadZone = React.createRef();
 
     this.state = {
-      coords: {}
+      coords: {
+        a: { x: 0, y: 0 },
+        b: { x: 0, y: 0 },
+        c: { x: 0, y: 0 },
+        d: { x: 0, y: 0 }
+      }
     };
   }
 
@@ -41,20 +39,45 @@ export class LoadArea extends React.Component {
     };
 
     this.setState({ coords });
+    this.props.onAddLoadArea({ coords });
   };
 
   render() {
     return (
       <StyledLoadArea ref={this.gridLoadZone} cover={this.props.cover}>
-        Load Area
+        <GridPiece maxWidth={4} maxHeight={4} />
+        <GridPiece maxWidth={4} maxHeight={4} />
+        <GridPiece maxWidth={4} maxHeight={4} />
+        <GridPiece maxWidth={4} maxHeight={4} />
+        <GridPiece maxWidth={4} maxHeight={4} />
+        <GridPiece maxWidth={4} maxHeight={4} />
+        <GridPiece maxWidth={4} maxHeight={4} />
+        <GridPiece maxWidth={4} maxHeight={4} />
+        <GridPiece maxWidth={4} maxHeight={4} />
+        <GridPiece maxWidth={4} maxHeight={4} />
+        <GridPiece maxWidth={4} maxHeight={4} />
+        <GridPiece maxWidth={4} maxHeight={4} />
+        <GridPiece maxWidth={4} maxHeight={4} />
+        <GridPiece maxWidth={4} maxHeight={4} />
+        <GridPiece maxWidth={4} maxHeight={4} />
+        <GridPiece maxWidth={4} maxHeight={4} />
       </StyledLoadArea>
     );
   }
 }
 
-const mapStateToProps = state => {};
+const mapStateToProps = state => {
+  return {};
+};
 
-const mapDispatchToProps = dispatch => {};
+const mapDispatchToProps = dispatch => {
+  return {
+    onAddLoadArea: coords => {
+      dispatch(addLoadArea(coords));
+    }
+  };
+};
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps

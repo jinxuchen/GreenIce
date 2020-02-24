@@ -22,23 +22,32 @@ export class Drag extends React.Component {
 
   handleMouseMove = e => {
     e.preventDefault();
+    const width = this.props.gridPieces[0];
+    const height = this.props.gridPieces.length;
 
-    if (this.props.move) {
+    if (!this.props.move) {
       const mouseX = e.clientX;
       const mouseY = e.clientY;
 
       const moveX = mouseX - this.props.initialX - 75;
       const moveY = mouseY - this.props.initialY - 75;
 
-      this.checkCover();
+      const width = this.props.gridPieces[0].length;
+      const height = this.props.gridPieces.length;
+      for (let i = 0; i < height; i++) {
+        for (let j = 0; j < width; j++) {
+          const gridPiece = this.props.gridPieces[i][j];
+          this.checkCover(gridPiece);
+        }
+      }
 
       this.props.onUpdateMoveXY(this.props.id, moveX, moveY);
     }
   };
 
-  checkCover = () => {
+  checkCover = gridPiece => {
     const i = this.props.coords;
-    const l = this.state.loadZoneCoords;
+    const l = gridPiece;
 
     if (i.a.x <= l.a.x && i.b.x <= l.a.x) {
       this.setState({ cover: false });
@@ -72,13 +81,21 @@ export class Drag extends React.Component {
 }
 
 export const mapStateToProps = state => {
-  let coords;
+  let coords = {
+    a: { x: 0, y: 0 },
+    b: { x: 0, y: 0 },
+    c: { x: 0, y: 0 },
+    d: { x: 0, y: 0 }
+  };
+  let gridPieces;
   let initialX;
   let initialY;
   let index;
   let moveItem;
   let move = false;
   let id;
+
+  gridPieces = state.grid;
 
   //get moving item index
   index = findIndex(state.item, { move: true });
@@ -91,9 +108,10 @@ export const mapStateToProps = state => {
     move = moveItem.move;
     id = moveItem.id;
   }
+  console.log(coords);
 
   return {
-    data: state.data,
+    gridPieces,
     coords,
     initialX,
     initialY,

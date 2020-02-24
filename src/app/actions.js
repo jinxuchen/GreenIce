@@ -5,6 +5,22 @@ export const addItem = itemInfo => {
   };
 };
 
+export const addGridPiece = (coords, maxWidth, maxHeight) => {
+  return {
+    type: "ADD_GRID_PIECE",
+    ...coords,
+    maxWidth,
+    maxHeight
+  };
+};
+
+export const addLoadArea = coords => {
+  return {
+    type: "ADD_LOAD_AREA",
+    ...coords
+  };
+};
+
 export const updateMove = (id, move) => {
   return {
     type: "UPDATE_MOVE",

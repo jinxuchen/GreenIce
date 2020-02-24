@@ -1,23 +1,45 @@
 import { findIndex } from "lodash";
 
 const initialState = {
-  data: 1,
+  loadArea: {
+    coords: {
+      a: { x: 0, y: 0 },
+      b: { x: 0, y: 0 },
+      c: { x: 0, y: 0 },
+      d: { x: 0, y: 0 }
+    }
+  },
   item: [
     {
       id: "",
       coords: {
-        a: { x: 1, y: 1 },
-        b: { x: 1, y: 1 },
-        c: { x: 1, y: 1 },
-        d: { x: 1, y: 1 }
+        a: { x: 0, y: 0 },
+        b: { x: 0, y: 0 },
+        c: { x: 0, y: 0 },
+        d: { x: 0, y: 0 }
       },
-      itemInitialX: 1,
-      itemInitialY: 1,
-      moveX: 1,
-      moveY: 1,
+      itemInitialX: 0,
+      itemInitialY: 0,
+      moveX: 0,
+      moveY: 0,
       cover: false
     }
-  ]
+  ],
+  //1x1 template grid[0][0]
+  /*    [
+          [
+            {
+              coords: {
+                a: { x: 0, y: 0 },
+                b: { x: 0, y: 0 },
+                c: { x: 0, y: 0 },
+                d: { x: 0, y: 0 }
+              },
+              cover: false
+            }
+          ]
+        ]*/
+  grid: [[]]
 };
 
 const getTargetIndex = (state, id) => {
@@ -42,6 +64,32 @@ const addItem = (state = initialState, action) => {
       state.item.push({ ...action });
       return {
         ...state
+      };
+
+    case "ADD_GRID_PIECE":
+      //add coords of grid pieces into LoadAre
+      if (state.grid.length !== action.maxHeight) {
+        state.grid = [];
+        for (let i = 0; i < action.maxHeight; i++) {
+          state.grid.push([]);
+        }
+      }
+
+      for (let i = 0; i < action.maxHeight; i++) {
+        for (let j = 0; j < action.maxWidth; j++) {
+          if (state.grid[j].length < action.maxWidth) {
+            state.grid[j].push({ ...action.coords });
+            return { ...state };
+          }
+        }
+      }
+
+    case "ADD_LOAD_AREA":
+      return {
+        ...state,
+        loadArea: {
+          coords: action.coords
+        }
       };
 
     case "UPDATE_MOVE":
