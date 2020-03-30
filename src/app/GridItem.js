@@ -91,6 +91,18 @@ export class GridItem extends React.Component {
     }
   };
 
+  handleClick = () => {
+    if (this.props.type === "click") {
+      if (this.state.move) {
+        this.setState({ move: false });
+        this.props.onUpdateMove(this.state.id, false);
+      } else {
+        this.setState({ move: true });
+        this.props.onUpdateMove(this.state.id, true);
+      }
+    }
+  };
+
   render() {
     return (
       <StyledItem
@@ -102,6 +114,7 @@ export class GridItem extends React.Component {
         onMouseDown={this.handleMouseDown}
         moveX={this.props.moveX}
         moveY={this.props.moveY}
+        onClick={this.handleClick}
       >
         {this.props.name}
         ({Math.round(this.state.coords.a.x)}
