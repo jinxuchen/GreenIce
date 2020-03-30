@@ -73,8 +73,8 @@ export class Drag extends React.Component {
   render() {
     return (
       <DragBoard onMouseMove={this.handleMouseMove}>
-        <GridItem id="1" type={this.props.type} name={this.props.name} />
-        <GridItem id="2" type={this.props.type} name={this.props.name} />
+        <GridItem id="1" type="click" name="Eve" />
+        <GridItem id="2" type="drag" name="Adam" />
 
         <LoadArea ref={this.gridLoadZone} gridMap={this.props.gridMap}>
           {this.props.data}
