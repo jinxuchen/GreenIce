@@ -2,10 +2,24 @@ import React, { Component } from "react";
 import { map } from "lodash";
 import styled from "styled-components";
 
+const StyledImg = styled.img`
+  max-height: 600px;
+  max-width: 600px;
+`;
+
 const StyledButton = styled.button`
   width: 100px;
-  height: ${props => props.height}px;
-  background-color: ${props => props.theme.color.blue};
+  height: 600px;
+  font-family: Andale Mono;
+  color: black;
+  font-size: 21px;
+
+  background-color: ${props => props.theme.color.khaki};
+  opacity: 1;
+
+  &:hover {
+    opacity: 0.8;
+  }
 `;
 
 const Board = styled.div`
@@ -48,7 +62,7 @@ export class FirstCall extends Component {
 
   render() {
     const catImg = map(this.state.items, item => (
-      <img src={item.url} key={item.id} />
+      <StyledImg src={item.url} key={item.id} />
     ));
 
     return (
