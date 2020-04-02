@@ -84,7 +84,9 @@ export class FirstCall extends Component {
         src={item.url}
         key={item.id}
         height={this.state.imgHeight}
+ 
         onClick={this.handleClickCat}
+ 
       />
     ));
     const dogImg = (
