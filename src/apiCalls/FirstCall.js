@@ -62,7 +62,12 @@ export class FirstCall extends Component {
 
   render() {
     const catImg = map(this.state.items, item => (
-      <StyledImg src={item.url} key={item.id} />
+      <StyledImg
+        src={item.url}
+        key={item.id}
+        height={this.state.imgHeight}
+        onClick={this.handleClick}
+      />
     ));
 
     return (
