@@ -23,8 +23,14 @@ const StyledButton = styled.button`
 `;
 
 const Board = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-item: center;
+`;
+
+const ImageButton = styled.div`
   display: flex;
-  align-items: center;
+  flex-direciton: row;
 `;
 
 export class FirstCall extends Component {
@@ -35,22 +41,34 @@ export class FirstCall extends Component {
     this.state = {
       error: null,
       isLoaded: false,
-      items: [],
+      resCat: [],
+      resDog: {},
       imgHeight: "",
       tem: 0
     };
   }
 
-  handleClick = () => {
+  handleClickCat = () => {
     this._isMounted = true;
     fetch("https://api.thecatapi.com/v1/images/search")
       .then(res => res.json())
       .then(data => {
         if (this._isMounted) {
-          console.log(data);
-          console.log(data[0].height);
+          this.setState({ resCat: data, imgHeight: data[0].height });
+        }
+      })
+      .catch(console.log);
+  };
 
-          this.setState({ items: data, imgHeight: data[0].height });
+  handleClickCatDog = () => {
+    this._isMounted = true;
+    fetch("https://dog.ceo/api/breeds/image/random")
+      .then(res => res.json())
+      .then(data => {
+        if (this._isMounted) {
+          console.log(data);
+
+          this.setState({ resDog: data });
         }
       })
       .catch(console.log);
@@ -61,16 +79,42 @@ export class FirstCall extends Component {
   }
 
   render() {
-    const catImg = map(this.state.items, item => (
-      <StyledImg src={item.url} key={item.id} />
+    const catImg = map(this.state.resCat, item => (
+      <StyledImg
+        src={item.url}
+        key={item.id}
+        height={this.state.imgHeight}
+        onClick={this.handleClickCat}
+      />
     ));
+    const dogImg = (
+      <StyledImg
+        src={this.state.resDog.message}
+        height={this.state.imgHeight}
+        onClick={this.handleClickCatDog}
+      />
+    );
 
     return (
       <Board>
-        {catImg}
-        <StyledButton height={this.state.imgHeight} onClick={this.handleClick}>
-          Request a cat!
-        </StyledButton>
+        <ImageButton>
+          <div>{catImg}</div>
+          <StyledButton
+            height={this.state.imgHeight}
+            onClick={this.handleClickCat}
+          >
+            Request a cat!
+          </StyledButton>
+        </ImageButton>
+        <ImageButton>
+          {dogImg}
+          <StyledButton
+            height={this.state.imgHeight}
+            onClick={this.handleClickCatDog}
+          >
+            Request a puppy!
+          </StyledButton>
+        </ImageButton>
       </Board>
     );
   }
