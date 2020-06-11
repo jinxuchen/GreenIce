@@ -21,8 +21,8 @@ export class App extends React.Component {
     return (
       <ThemeProvider theme={theme}>
         <Router>
-          <div>
-            <Redirect to="/home" />
+          <div>  
+            <Redirect to="/about" />
             <Link to="/about" />
             <Link to="/travel" />
             <Link to="/game" />

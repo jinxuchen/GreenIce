@@ -23,8 +23,10 @@ class About extends React.Component {
     return (
       <div>
         <HeaderBar />
-        <Header img="logo192.png">About Me!</Header>
+        <Header img="img/course_schedule.png">About Me!</Header>
         <NavBar />
+
+        <img src="img/auska_pic.jpg" />
 
         <button
           style={{ height: "100px", width: "100px", backgroundColor: "red" }}
